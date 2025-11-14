@@ -4,12 +4,6 @@ Este é um projeto de aplicação web completa, desenvolvido em Python com **Fla
 
 A interface foi customizada com um tema "PS2-style" em CSS puro, sem o uso de frameworks como Bootstrap.
 
-## 🧑‍💻 Autor(es)
-
-  * [Seu Nome Aqui]
-  * [Nome do Colega 1 (se houver)]
-  * [Nome do Colega 2 (se houver)]
-
 -----
 
 ## 📊 Dataset: Video Game Sales with Ratings
