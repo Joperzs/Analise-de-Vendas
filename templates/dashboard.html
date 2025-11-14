@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard de Análise Interativa</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='ps2_theme.css') }}">
+</head>
+<body class="bg-light"> 
+
+    <nav class="navbar">
+        <a href="/">Upload</a>
+        <a href="/dashboard" class="active">Dashboard</a>
+        <a href="/machine-learning">Machine Learning</a>
+    </nav>
+    
+    <div class="main-container">
+
+        <h1 class="section-title">Dashboard de Análise Interativa</h1>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Perfil da Limpeza (ETL)</h3>
+            </div>
+            <div class="card-body">
+                <p>A limpeza e unificação por jogo reduziram o dataset para analisar apenas jogos únicos.</p>
+                
+                <div class="alert-info" role="alert">
+                    <strong>Nota Importante:</strong> O jogo "Wii Sports" foi removido da análise por ser um outlier extremo. 
+                    Ele foi vendido em bundle com o console Wii (82.9M de vendas), o que distorce as análises de correlação e padrões naturais de mercado.
+                </div>
+                
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">Linhas Originais</div>
+                        <div class="stat-card-value">{{ etl_info.original_rows }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">Jogos Únicos (Pós-Limpeza)</div>
+                        <div class="stat-card-value">{{ etl_info.cleaned_rows }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-header">Linhas Removidas/Unificadas</div>
+                        <div class="stat-card-value">{{ etl_info.rows_removed }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Análise Visual Interativa</h2>
+        
+        <div class="chart-grid-full">
+            <div class="plot-container">
+                <h3>Top 10 Gêneros por Vendas Totais</h3>
+                <p>Passe o mouse sobre as barras para ver valores exatos</p>
+                {{ plot_htmls.genero_vendas|safe }}
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="plot-container"> 
+                <h3>Relação: Nota da Crítica vs. Vendas</h3>
+                <p>Clique e arraste para zoom. Duplo clique para resetar.</p>
+                {{ plot_htmls.scatter_critica|safe }}
+            </div>
+            <div class="plot-container">
+                <h3>Relação: Nota do Usuário vs. Vendas</h3>
+                <p>O tamanho das bolhas = número de avaliações.</p>
+                {{ plot_htmls.scatter_usuario|safe }}
+            </div>
+        </div> 
+        
+        <div class="chart-grid">
+             <div class="plot-container">
+                <h3>Distribuição de Vendas por Gênero (Foco 0-5M)</h3>
+                <p>Veja mediana, quartis e outliers por gênero</p>
+                {{ plot_htmls.boxplot_genero|safe }}
+             </div>
+             <div class="plot-container">
+                <h3>Distribuição de Vendas por Classificação (Foco 0-5M)</h3>
+                <p>Análise por faixa etária (ESRB)</p>
+                {{ plot_htmls.boxplot_classificacao|safe }}
+             </div>
+        </div> 
+
+        <div class="chart-grid">
+            <div class="plot-container">
+                <h3>Relação: "Hype" (Contagem Crítica) vs. Vendas</h3>
+                <p>Cores = nota da crítica | Tamanho = vendas globais</p>
+                {{ plot_htmls.scatter_hype|safe }}
+            </div>
+            <div class="plot-container">
+                <h3>Média de Vendas Globais por Ano</h3>
+                <p>Tendência temporal das vendas médias (1996+)</p>
+                {{ plot_htmls.line_temporal|safe }}
+            </div>
+        </div>
+
+        <div class="chart-grid">
+            <div class="plot-container">
+                <h3>Heatmap de Correlação (O Guia do ML)</h3>
+                <p>Quanto mais próximo de 1, maior a correlação positiva</p>
+                {{ plot_htmls.heatmap|safe }}
+            </div>
+            <div class="plot-container">
+                <h3>Contagem de Jogos Lançados por Ano</h3>
+                <p>Volume de lançamentos ao longo do tempo</p>
+                {{ plot_htmls.line_temporal_count|safe }}
+            </div>
+        </div>
+
+        <div class="chart-grid-full">
+            <div class="plot-container">
+                <h3>Contagem de Jogos por Gênero (Todos)</h3>
+                <p>Todos os gêneros do dataset limpo - ordenados por popularidade</p>
+                {{ plot_htmls.bar_genre_count|safe }}
+            </div>
+        </div>
+
+        <h2 class="section-title">Análise Regional de Vendas</h2>
+        
+        <div class="chart-grid-full">
+            <div class="plot-container">
+                <h3>Distribuição Regional de Vendas por Gênero</h3>
+                <p>Veja como cada gênero performa em diferentes regiões do mundo</p>
+                {{ plot_htmls.bar_regional_genero|safe }}
+            </div>
+        </div>
+        
+        <div class="chart-grid">
+            <div class="plot-container">
+                <h3>Mapa de Calor: % Vendas por Região</h3>
+                <p>Revela quais gêneros dominam em cada região (ex: RPG no Japão)</p>
+                {{ plot_htmls.heatmap_regional|safe }}
+            </div>
+            <div class="plot-container">
+                <h3>Distribuição Global por Região</h3>
+                <p>Overview geral das vendas mundiais</p>
+                {{ plot_htmls.pizza_regional|safe }}
+            </div>
+        </div>
+        
+        <div class="chart-grid-full">
+            <div class="plot-container">
+                <h3>Comparação: América do Norte vs. Japão</h3>
+                <p>Jogos acima da linha vermelha vendem mais na NA. Abaixo = mais no Japão</p>
+                {{ plot_htmls.scatter_na_vs_jp|safe }}
+            </div>
+        </div>
+
+        <h2 class="section-title">Listas de Destaque (Top 20)</h2>
+        <div class="chart-grid">
+            <div class="card">
+                <div class="card-header"><h3>Top 20 Jogos Mais Vendidos</h3></div>
+                <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                    {{ html_top_vendas|safe }}
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header"><h3>Top 20 Jogos Mais Bem Avaliados (Crítica)</h3></div>
+                <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                    {{ html_top_notas|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-5"> 
+            <div class="card-header"><h3>Amostra dos Dados Agregados (.head(10))</h3></div>
+            <div class="card-body">
+                <p>Abaixo estão as 10 primeiras linhas dos dados <strong>após</strong> a limpeza e agregação.</p>
+                <div style="overflow-x: auto;">
+                    {{ table|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="/machine-learning" class="btn-success">Ir para Machine Learning</a>
+            <a href="/" class="btn-primary">Voltar e Enviar Outro Arquivo</a>
+        </div>
+    </div> 
+</body>
+</html>

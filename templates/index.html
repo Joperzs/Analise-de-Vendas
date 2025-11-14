@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Trabalho Final - Upload</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='ps2_theme.css') }}">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h1>Aplicação de Análise e ML</h1>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center text-muted">Use o dataset de vendas de jogos (vgsales) para começar.</p>
+                        
+                        <form action="/upload" method="POST" enctype="multipart/form-data" class="mt-4">
+                            
+                            <div class="mb-3">
+                                <label for="file-upload" class="file-upload-label">
+                                    <span>Clique para escolher o arquivo .csv</span>
+                                </label>
+                                <input type="file" name="file" id="file-upload" class="form-control" accept=".csv" required>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Enviar e Analisar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('file-upload').addEventListener('change', function() {
+            var label = document.querySelector('.file-upload-label span');
+            var fileName = this.files[0] ? this.files[0].name : 'Clique para escolher o arquivo .csv';
+            label.textContent = fileName;
+        });
+    </script>
+
+</body>
+</html>

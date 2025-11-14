@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Machine Learning - Predição de Sucesso</title>
+    
+    <!-- 1. REMOVA o link do Bootstrap e <style> -->
+    
+    <!-- 2. ADICIONE o link para o nosso tema -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='ps2_theme.css') }}">
+</head>
+<body class="bg-light">
+    
+    <!-- Barra de Navegação Consistente -->
+    <nav class="navbar">
+        <a href="/">Upload</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/machine-learning" class="active">Machine Learning</a>
+    </nav>
+
+    <!-- Container Principal -->
+    <div class="main-container">
+
+        <h1 class="section-title">Machine Learning</h1>
+
+        {% if not modelos_treinados %}
+        <!-- ====================================================== -->
+        <!-- ESTADO 1: ANTES DE TREINAR (Form de Configuração)       -->
+        <!-- ====================================================== -->
+        
+        <div class="card">
+            <div class="card-header">
+                <h3>Configurar e Treinar Modelos</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert-info">
+                    <strong>Dados carregados!</strong> Configure os hiperparâmetros e treine os modelos.
+                </div>
+                
+                <form action="/treinar-modelos-customizado" method="POST" class="mt-4">
+                    
+                    <!-- Random Forest -->
+                    <div class="form-section">
+                        <h4>Random Forest</h4>
+                        <div class="form-group">
+                            <label for="rf_n_estimators">Número de Árvores:</label>
+                            <input type="range" class="form-range" name="rf_n_estimators" id="rf_n_estimators" min="50" max="200" value="100" step="10" 
+                                   oninput="this.nextElementSibling.value = this.value">
+                            <output class="slider-output">100</output>
+                            <small>Mais árvores = mais preciso (mas mais lento)</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="rf_max_depth">Profundidade Máxima:</label>
+                            <input type="range" class="form-range" name="rf_max_depth" id="rf_max_depth" min="5" max="30" value="15" 
+                                   oninput="this.nextElementSibling.value = this.value">
+                            <output class="slider-output">15</output>
+                            <small>Controla complexidade do modelo</small>
+                        </div>
+                    </div>
+
+                    <!-- Decision Tree -->
+                    <div class="form-section">
+                        <h4>Decision Tree</h4>
+                        <div class="form-group">
+                            <label for="dt_max_depth">Profundidade Máxima:</label>
+                            <input type="range" class="form-range" name="dt_max_depth" id="dt_max_depth" min="3" max="20" value="10" 
+                                   oninput="this.nextElementSibling.value = this.value">
+                            <output class="slider-output">10</output>
+                            <small>Menor = mais simples, evita overfitting</small>
+                        </div>
+                    </div>
+
+                    <!-- KNN -->
+                    <div class="form-section">
+                        <h4>KNN (K-Nearest Neighbors)</h4>
+                        <div class="form-group">
+                            <label for="knn_n_neighbors">Número de Vizinhos:</label>
+                            <input type="range" class="form-range" name="knn_n_neighbors" id="knn_n_neighbors" min="3" max="15" value="5" 
+                                   oninput="this.nextElementSibling.value = this.value">
+                            <output class="slider-output">5</output>
+                            <small>Quantos vizinhos considerar na votação</small>
+                        </div>
+                    </div>
+
+                    <!-- SVM -->
+                    <div class="form-section">
+                        <h4>SVM (Support Vector Machine)</h4>
+                        <div class="form-group">
+                            <label for="svm_c">Parâmetro C:</label>
+                            <select name="svm_c" class="form-select">
+                                <option value="0.1">0.1 (mais regularizado)</option>
+                                <option value="1.0" selected>1.0 (padrão)</option>
+                                <option value="10.0">10.0 (menos regularizado)</option>
+                            </select>
+                            <small>Controla trade-off entre margem e erro</small>
+                        </div>
+                    </div>
+
+                    <!-- Logistic Regression -->
+                    <div class="form-section">
+                        <h4>Logistic Regression</h4>
+                        <div class="alert-info" style="background-color: rgba(100,100,100,0.1); border-color: #555;">
+                            Modelo linear - sem parâmetros ajustáveis nesta demo.
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn-success btn-lg">
+                            Treinar Modelos com Estes Parâmetros
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        {% else %}
+        <!-- ====================================================== -->
+        <!-- ESTADO 2: DEPOIS DE TREINAR (Gráficos e Predição)      -->
+        <!-- ====================================================== -->
+        
+        <!-- Hiperparâmetros usados -->
+        {% if hiperparametros %}
+        <div class="alert-success">
+            <strong>Modelos Treinados com Sucesso!</strong>
+            <p style="margin-top: 10px; margin-bottom: 0;"><strong>Hiperparâmetros utilizados:</strong></p>
+            <ul>
+                <li><strong>Random Forest:</strong> {{ hiperparametros.rf_n_estimators }} árvores, profundidade {{ hiperparametros.rf_max_depth }}</li>
+                <li><strong>Decision Tree:</strong> profundidade {{ hiperparametros.dt_max_depth }}</li>
+                <li><strong>KNN:</strong> {{ hiperparametros.knn_n_neighbors }} vizinhos</li>
+                <li><strong>SVM:</strong> C = {{ hiperparametros.svm_c }}</li>
+            </ul>
+        </div>
+        {% endif %}
+        
+        <!-- Comparação de modelos -->
+        <h2 class="section-title">Comparação de Performance</h2>
+        <div class="chart-grid">
+            <div class="plot-container">
+                {{ grafico_comp_faixas|safe }}
+            </div>
+            <div class="plot-container">
+                {{ grafico_comp_sucesso|safe }}
+            </div>
+        </div>
+        
+        <h2 class="section-title">Fazer Predições</h2>
+        
+        <!-- Formulários de predição -->
+        <div class="ml-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Modelo 1: Classificação de Faixas</h3>
+                </div>
+                <div class="card-body">
+                    <p>Classifica em 4 categorias: Flop (0-0.5M), Moderado (0.5-2M), Sucesso (2-10M), Blockbuster (10M+)</p>
+                    
+                    <form action="/prever" method="POST">
+                        <input type="hidden" name="tipo_predicao" value="faixas">
+                        
+                        <div class="form-group" style="background: #1a1a3a; padding: 1rem; border-radius: 5px;">
+                            <label for="modelo_faixas">Escolha o Modelo:</label>
+                            <select name="modelo_escolhido" id="modelo_faixas" class="form-select" required>
+                                <option value="">-- Selecione --</option>
+                                {% for modelo in modelos_faixas %}
+                                <option value="{{ modelo }}">{{ modelo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="genero_f">Gênero:</label>
+                            <select name="genero" id="genero_f" class="form-select" required>
+                                {% for g in generos %}<option value="{{ g }}">{{ g }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="classificacao_f">Classificação:</label>
+                            <select name="classificacao" id="classificacao_f" class="form-select" required>
+                                {% for c in classificacoes %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nota_critica_f">Nota Crítica (0-100):</label>
+                            <input type="number" name="nota_critica" id="nota_critica_f" class="form-control" min="0" max="100" value="75" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nota_usuario_f">Nota Usuário (0-10):</label>
+                            <input type="number" name="nota_usuario" id="nota_usuario_f" class="form-control" min="0" max="10" step="0.1" value="7.5" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contagem_critica_f">"Hype" - Nº Críticos:</label>
+                            <input type="number" name="contagem_critica" id="contagem_critica_f" class="form-control" min="0" value="50" required>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-lg">Prever Faixa</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Modelo 2: Sucesso/Fracasso</h3>
+                </div>
+                <div class="card-body">
+                    <p>Classificação binária: Sucesso (Vendas > 2M OU Nota > 75) ou Fracasso.</p>
+                    
+                    <form action="/prever" method="POST">
+                        <input type="hidden" name="tipo_predicao" value="sucesso">
+                        
+                        <div class="form-group" style="background: #1a1a3a; padding: 1rem; border-radius: 5px;">
+                            <label for="modelo_sucesso">Escolha o Modelo:</label>
+                            <select name="modelo_escolhido" id="modelo_sucesso" class="form-select" required>
+                                <option value="">-- Selecione --</option>
+                                {% for modelo in modelos_sucesso %}
+                                <option value="{{ modelo }}">{{ modelo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="genero_s">Gênero:</label>
+                            <select name="genero" id="genero_s" class="form-select" required>
+                                {% for g in generos %}<option value="{{ g }}">{{ g }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="classificacao_s">Classificação:</label>
+                            <select name="classificacao" id="classificacao_s" class="form-select" required>
+                                {% for c in classificacoes %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nota_critica_s">Nota Crítica (0-100):</label>
+                            <input type="number" name="nota_critica" id="nota_critica_s" class="form-control" min="0" max="100" value="75" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nota_usuario_s">Nota Usuário (0-10):</label>
+                            <input type="number" name="nota_usuario" id="nota_usuario_s" class="form-control" min="0" max="10" step="0.1" value="7.5" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="contagem_critica_s">"Hype" - Nº Críticos:</label>
+                            <input type="number" name="contagem_critica" id="contagem_critica_s" class="form-control" min="0" value="50" required>
+                        </div>
+                        
+                        <button type="submit" class="btn-success btn-lg">Prever Sucesso</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resultado -->
+        {% if resultado %}
+        <div class="result-card" 
+             style="border-color: {% if resultado.cor == 'success' %}#00d800{% elif resultado.cor == 'danger' %}#ff4d4d{% elif resultado.cor == 'warning' %}#ffc400{% else %}var(--ps2-blue-hover){% endif %};">
+            
+            <h2>Resultado da Predição</h2>
+            
+            <h3 class="{% if resultado.cor == 'success' %}result-success{% elif resultado.cor == 'danger' %}result-fail{% elif resultado.cor == 'warning' %}result-mid{% else %}result-high{% endif %}">
+                {{ resultado.predicao }}
+            </h3>
+            
+            <p><strong>Tipo de Predição:</strong> {{ resultado.tipo }}</p>
+            <p><strong>Modelo Utilizado:</strong> {{ resultado.modelo_usado }}</p>
+            <p><strong>Confiança:</strong> {{ resultado.confianca }}</p>
+            
+            <div class="progress-bar">
+                <div class="progress-bar-inner" 
+                     style="width: {{ resultado.confianca }}; background-color: {% if resultado.cor == 'success' %}#00a800{% elif resultado.cor == 'danger' %}#cc0000{% elif resultado.cor == 'warning' %}#ff8c00{% else %}var(--ps2-blue-glow){% endif %};">
+                    {{ resultado.confianca }}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Botões de Navegação -->
+        <div class="nav-buttons">
+            <a href="/dashboard" class="btn-primary">Ver Dashboard</a>
+            <a href="/" class="btn-primary">Novo Upload</a>
+            <form action="/configurar-treino" method="GET" style="display: inline;">
+                <button type="submit" class="btn-warning">Re-treinar com Outros Parâmetros</button>
+            </form>
+        </div>
+        
+        {% endif %}
+    </div>
+
+</body>
+</html>

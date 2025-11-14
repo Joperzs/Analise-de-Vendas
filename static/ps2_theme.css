@@ -1,0 +1,456 @@
+/* Salve como: static/ps2_theme.css */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+:root {
+    /* -- CORES PRINCIPAIS -- */
+    --ps2-bg: #0d0d1a; /* Fundo roxo/azul BEM escuro */
+    --ps2-panel: #181828; /* Painel um pouco mais claro */
+    --ps2-border: #303040; /* Borda sutil */
+    --ps2-text: #b0b0c0; /* Texto principal (cinza-azulado) */
+    --ps2-text-dark: #606070; /* Texto secundário */
+    --ps2-header: #ffffff; /* Títulos */
+
+    /* -- CORES DE DESTAQUE (MENOS SATURADAS) -- */
+    --ps2-blue: #005cbb; /* Um azul mais escuro e sério */
+    --ps2-blue-hover: #0077e6; /* Hover um pouco mais claro */
+    --ps2-green: #008a00; /* Verde mais escuro */
+    --ps2-green-hover: #00a800; /* Hover do verde */
+    --ps2-orange: #d97d00; /* Laranja/âmbar */
+    --ps2-orange-hover: #f08c00; /* Hover do laranja */
+
+    /* -- EFEITOS DE BRILHO (BEM SUTIS) -- */
+    --ps2-blue-glow: rgba(0, 119, 255, 0.15); /* Brilho do painel */
+    --ps2-blue-glow-text: rgba(0, 119, 255, 0.3); /* Brilho do texto */
+    --ps2-blue-glow-hover: rgba(0, 119, 255, 0.4); /* Brilho do hover do botão */
+}
+
+/* O corpo da página com o fundo "orbs" sutil */
+body.bg-light {
+    font-family: 'Orbitron', sans-serif;
+    background-color: var(--ps2-bg);
+    color: var(--ps2-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding-top: 20px;
+
+    /* Efeito "orbs" BEM mais sutil */
+    background-image:
+        radial-gradient(circle at 15% 25%, rgba(50, 50, 150, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(50, 100, 150, 0.04) 0%, transparent 50%);
+    background-attachment: fixed;
+}
+
+/* O "card" central */
+.card {
+    background: var(--ps2-panel);
+    border: 1px solid var(--ps2-border);
+    box-shadow: 0 0 20px var(--ps2-blue-glow); /* Brilho do painel sutil */
+    border-radius: 8px;
+}
+
+/* O cabeçalho do card */
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--ps2-border);
+    text-align: center;
+}
+
+.card-header h1 {
+    color: var(--ps2-header);
+    text-shadow: 0 0 8px var(--ps2-blue-glow-text); /* Sombra de texto sutil */
+    font-size: 2rem;
+    margin: 0.5rem 0;
+}
+
+/* O corpo do card */
+.card-body {
+    padding: 2rem;
+}
+
+.card-body h5 {
+    color: var(--ps2-text);
+    font-weight: 700;
+}
+
+.card-body p {
+    color: var(--ps2-text-dark);
+}
+
+/* Estilizando os formulários */
+.form-label {
+    color: var(--ps2-text);
+    font-size: 0.9rem;
+}
+
+input[type="file"].form-control {
+    display: none;
+}
+
+/* Botão "fake" para o input de arquivo */
+.file-upload-label {
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 2px dashed var(--ps2-border);
+    background-color: var(--ps2-bg);
+    border-radius: 5px;
+    color: var(--ps2-text-dark);
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+    text-align: center;
+}
+
+.file-upload-label:hover {
+    background-color: #2a2a4a;
+    border-color: var(--ps2-blue-hover);
+    color: var(--ps2-text);
+}
+
+/* Estilizando o botão de submit (btn-primary) */
+.btn-primary {
+    font-family: 'Orbitron', sans-serif;
+    background-color: var(--ps2-blue); /* Cor nova */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-shadow: 0 0 4px rgba(0,0,0,0.5); /* Sombra de texto mais leve */
+    width: 100%;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: var(--ps2-blue-hover); /* Cor nova */
+    color: white; 
+    border: none;
+    outline: none;
+    box-shadow: 0 0 10px var(--ps2-blue-glow-hover); /* Brilho de hover sutil */
+}
+
+.d-grid {
+    margin-top: 2rem;
+}
+
+/* =================================================================== */
+/* ESTILOS ADICIONAIS PARA O DASHBOARD                               */
+/* =================================================================== */
+
+.main-container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 2rem auto;
+}
+
+h2.section-title {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--ps2-header);
+    text-shadow: 0 0 8px var(--ps2-blue-glow-text);
+    font-size: 1.8rem;
+    text-align: center;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--ps2-border);
+    padding-bottom: 1rem;
+}
+
+.chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1.5rem;
+}
+
+.chart-grid-full {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+    .chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.plot-container {
+    background: var(--ps2-panel);
+    border: 1px solid var(--ps2-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.plot-container h3 {
+    font-size: 1.1rem;
+    color: var(--ps2-header);
+    margin-top: 0;
+    text-align: center;
+}
+
+.plot-container p {
+    color: var(--ps2-text-dark);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.plotly-graph-div {
+    width: 100%;
+    height: 100%;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+.stat-card {
+    background: var(--ps2-panel);
+    border: 1px solid var(--ps2-border);
+    border-left: 5px solid var(--ps2-blue); /* Cor nova */
+    padding: 1.5rem;
+    border-radius: 5px;
+    text-align: center;
+}
+.stat-card-header {
+    font-size: 0.9rem;
+    color: var(--ps2-text-dark);
+    margin-bottom: 0.5rem;
+}
+.stat-card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--ps2-header);
+}
+
+.alert-info {
+    background-color: rgba(0, 119, 255, 0.1); /* Brilho sutil */
+    border: 1px solid var(--ps2-blue); /* Cor nova */
+    color: var(--ps2-text);
+    padding: 1rem;
+    border-radius: 5px;
+    margin: 1.5rem 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    color: var(--ps2-text);
+}
+
+table th, table td {
+    padding: 0.75rem;
+    border: 1px solid var(--ps2-border);
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+table th {
+    background-color: var(--ps2-bg);
+    font-weight: 700;
+}
+
+table tr:nth-child(even) {
+    background-color: var(--ps2-panel);
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+/* Botão de Sucesso (Verde) */
+.btn-success {
+    font-family: 'Orbitron', sans-serif;
+    background-color: var(--ps2-green); /* Cor nova */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    text-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+.btn-success:hover {
+    background-color: var(--ps2-green-hover); /* Cor nova */
+    box-shadow: 0 0 10px rgba(0, 170, 0, 0.4);
+}
+
+/* =================================================================== */
+/* ESTILOS ADICIONAIS PARA O MACHINE_LEARNING                      */
+/* =================================================================== */
+
+.ml-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.form-section {
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--ps2-border);
+}
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--ps2-text);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.form-group small {
+    display: block;
+    color: var(--ps2-text-dark);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.form-control,
+.form-select {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--ps2-bg);
+    border: 1px solid var(--ps2-border);
+    border-radius: 5px;
+    color: var(--ps2-text);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23606070' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+.form-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    background: var(--ps2-bg);
+    border: 1px solid var(--ps2-border);
+    border-radius: 5px;
+    outline: none;
+}
+
+.form-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--ps2-blue); /* Cor nova */
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--ps2-panel);
+}
+
+.form-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--ps2-blue); /* Cor nova */
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--ps2-panel);
+}
+
+.slider-output {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ps2-blue-hover);
+    margin-left: 1rem;
+}
+
+/* Botão Laranja/Amarelo */
+.btn-warning {
+    font-family: 'Orbitron', sans-serif;
+    background-color: var(--ps2-orange); /* Cor nova */
+    color: black;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    text-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+.btn-warning:hover {
+    background-color: var(--ps2-orange-hover); /* Cor nova */
+    box-shadow: 0 0 10px rgba(217, 125, 0, 0.4);
+}
+
+/* Card de Resultado da Predição */
+.result-card {
+    background: var(--ps2-panel);
+    border: 1px solid var(--ps2-border);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+.result-card h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    color: var(--ps2-text);
+}
+.result-card h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+.result-card p {
+    color: var(--ps2-text-dark);
+    margin: 0.25rem 0;
+}
+
+/* Cores do Resultado */
+.result-success { color: #00d800; }
+.result-fail { color: #ff4d4d; }
+.result-mid { color: #ffc400; }
+.result-high { color: var(--ps2-blue-hover); }
+
+/* Barra de Progresso Customizada */
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background-color: var(--ps2-bg);
+    border: 1px solid var(--ps2-border);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.progress-bar-inner {
+    height: 100%;
+    line-height: 30px;
+    color: white;
+    font-weight: 700;
+    background-color: var(--ps2-blue); /* Cor nova */
+    transition: width 0.5s ease;
+    text-shadow: 0 0 5px rgba(0,0,0,0.7);
+}
